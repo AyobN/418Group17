@@ -1,0 +1,11 @@
+/.DS_Store
+/.venv
+/10k
+/BBS
+/ChaCha20
+/__pycache__
+/bbs_output.txt
+/cc20_million.txt
+/chacha20_output.txt
+/million_bbs_default.txt
+/sts-2.1.2
