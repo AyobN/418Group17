@@ -16,4 +16,7 @@ Blum Blum Shub (BBS) PRNG:
 A PRNG based on the hardness of factoring large numbers. BBS produces random bits by repeatedly squaring modulo n = p × q. For demonstration, small primes are currently used, but you are encouraged to use larger primes for more robust experiments.
 
 Output Generation:
-NIST.py prompts the user for the desired number of bits, generates random bit strings using both PRNGs, and saves the outputs to text files.
+generator.py prompts the user for the desired number of bits, generates random bit strings using both PRNGs, and saves the outputs to text files.
+
+## Usage
+
