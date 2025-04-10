@@ -20,7 +20,81 @@ generator.py prompts the user for the desired number of bits, generates random b
 
 ## Usage
 
-python generator.py
+## Usage
+
+### Generate output for both PRNGs (ChaCha20 and BBS)
+
+    python generator.py
+
+You will be prompted for:
+- Number of bits to generate
+- (Optional) Custom primes `p` and `q` for BBS
+- (Optional) Custom seed for BBS
+
+Outputs:
+- Bit string and binary files for both PRNGs in `output/`
+- Info files with internal parameters and timing stats
+
+---
+
+### Generate ChaCha20 PRNG output only
+
+    python cha_gen.py
+
+Prompts for:
+- Number of bits
+- Custom name for output
+
+Outputs saved in `chacha_output/`:
+- `<name>_output.bin`: binary bitstream
+- `<name>_output.txt`: bitstring
+- `<name>_info.txt`: key, nonce, constant, and generation time
+
+---
+
+### Generate BBS PRNG output only
+
+    python bbs_gen.py
+
+Prompts for:
+- Number of bits
+- (Optional) custom `p`, `q`, and seed
+- Custom name for output
+
+Outputs saved in `bbs_output/`:
+- `<name>_output.bin`: binary bitstream
+- `<name>_output.txt`: bitstring
+- `<name>_info.txt`: p, q, seed, and generation time
+
+---
+
+### Use ChaCha20 in your own code
+
+    from chacha20 import ChaChaPRNG
+    import secrets
+
+    key = secrets.token_bytes(32)
+    nonce = secrets.token_bytes(12)
+    prng = ChaChaPRNG(key, nonce)
+
+    bits = prng.generate_bits(256)
+    bytes_ = prng.generate_bytes(32)
+    string = prng.generate_string(128)
+
+---
+
+### Use Blum Blum Shub in your own code
+
+    from bbs import BlumBlumShubPRNG
+
+    p, q = 499, 547
+    seed = 1597
+    bbs = BlumBlumShubPRNG(p, q, seed)
+
+    bits = bbs.generate_bits(256)
+    bytes_ = bbs.generate_bytes(32)
+    string = bbs.generate_string(128)
+
 
 ## Dependencies
 
