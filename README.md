@@ -96,6 +96,8 @@ Outputs saved in `bbs_output/`:
 
 ## Dependencies
 
+- Python **3.6+**
+
 This project relies on the following external Python libraries:
 
 - **[sympy](https://www.sympy.org/)**  
