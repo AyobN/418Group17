@@ -20,8 +20,7 @@ generator.py prompts the user for the desired number of bits, generates random b
 
 ## Usage
 
-```bash
-    python generator.py
+python generator.py
 
 ## Dependencies
 
