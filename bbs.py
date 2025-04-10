@@ -1,4 +1,5 @@
 import math
+from bitstring import BitArray
 
 """
 Our BBS PRNG
@@ -15,7 +16,7 @@ Use functions generate_bits/generate_bytes
 
 class BlumBlumShubPRNG:
 
-    def __init__(self, p, q, seed):
+    def __init__(self, p: int, q: int, seed: int):
         # Ensure that p and q are congruent to 3 modulo 4.
         if p % 4 != 3 or q % 4 != 3:
             raise ValueError("Both p and q must be congruent to 3 modulo 4.")
@@ -23,11 +24,11 @@ class BlumBlumShubPRNG:
         # Calculate n = p * q.
         self.n = p * q
         
-        # Ensure that the seed is relatively prime to n.
-        if math.gcd(seed, self.n) != 1:
-            raise ValueError("Seed must be relatively prime to n (i.e., gcd(seed, n) must equal 1).")
+        # Ensure that the seed is coprime
+        if not (1 < seed < self.n and math.gcd(seed, self.n) == 1):
+            raise ValueError("Seed must be greater than 1, less than n, and co-prime with n.")
         
-        # Initialize the internal state: a common initialization is to set x0 = seed^2 mod n.
+        # Initialize the internal state: x_0
         self.state = (seed * seed) % self.n
 
     """
@@ -43,21 +44,34 @@ class BlumBlumShubPRNG:
         # return LSB
         return self.state & 1
 
-    """
-    Return string of n random bits
-    n: number of bits to generate
-    """
+    
     def generate_bits(self, n):
+        """
+        Return bitstring of n bits using bitarray
+        n: number of bits to generate
+        """
+        bits = BitArray()
+        for _ in range(n):
+            bit = self._next_bit()
+            bits.append(BitArray(uint=bit, length=1))
+        return bits
+    
+    def generate_string(self, n):
+        """
+        Generate n bits but in string form
+        n: number of bits desired
+        """
         bits = []
         for _ in range(n):
             bit = self._next_bit()
             bits.append(str(bit))
         return ''.join(bits)
-
-    """
-    Return n pseudorandom bytes.
-    """
+    
+    
     def generate_bytes(self, n):
+        """
+        Return n pseudorandom bytes.
+        """
         total_bits = n * 8
         bit_str = self.generate_bits(total_bits)
         byte_array = bytearray()
@@ -67,11 +81,15 @@ class BlumBlumShubPRNG:
             byte_value = int(byte_chunk, 2)
             byte_array.append(byte_value)
         return bytes(byte_array)
+    
+    def get_p(self):
+        return p
+    
+    def get_q(self):
+        return q
 
 # Example usage:
 if __name__ == "__main__":
-    # For demonstration, we'll use small primes
-    # In practice, use much larger primes for security
     p = 499  # p must be a prime and congruent to 3 mod 4
     q = 547  # q must also be a prime and congruent to 3 mod 4
     seed = 1597  # Choose a seed that is relatively prime to n (p * q)
@@ -82,9 +100,14 @@ if __name__ == "__main__":
     # Generate 100 random bits
     random_bits = bbs.generate_bits(100)
     print("100 random bits:")
-    print(random_bits)
+    print(random_bits.bin)
 
-    # Generate 16 random bytes
-    random_bytes = bbs.generate_bytes(16)
-    print("16 random bytes (in hex):")
+    # Generate 64 bytes
+    random_bytes = bbs.generate_bytes(64)
+    print("64 random bytes:")
     print(random_bytes.hex())
+
+    # Generate 100 bits but in string form
+    random_string = bbs.generate_string(100)
+    print("100 random bitS:")
+    print(random_string)
