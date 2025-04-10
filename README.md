@@ -20,8 +20,6 @@ generator.py prompts the user for the desired number of bits, generates random b
 
 ## Usage
 
-## Usage
-
 ### Generate output for both PRNGs (ChaCha20 and BBS)
 
     python generator.py
