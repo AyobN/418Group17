@@ -111,6 +111,32 @@ with open(cha_txt_path, "w") as f:
     f.write(cha_string)
 print(f"ChaCha20 bit string output saved to {cha_txt_filename}")
 
+# === Save ChaCha20 info file ===
+cha_info_filename = f"chacha20_output_{num_bits}_info.txt"
+cha_info_path = os.path.join(dir, cha_info_filename)
+
+
+constants = cha_prng.get_c()
+c_int = 0
+for const in constants:
+    c_int = (c_int << 32) | const
+c_hex = hex(c_int)
+
+key_int = int.from_bytes(key, byteorder='big')
+nonce_int = int.from_bytes(nonce, byteorder='big')
+
+with open(cha_info_path, "w") as f:
+    f.write(f"PRNG integer value: {cha_bits.uint}\n")
+    f.write(f"PRNG hex value: {cha_bits.hex}\n")
+    f.write(f"Key integer value: {key_int}\n")
+    f.write(f"Key hex value: {key.hex()}\n")
+    f.write(f"Constant int value: {c_int}\n")
+    f.write(f"Constant hex value: {c_hex}\n")
+    f.write(f"Nonce integer value: {nonce_int}\n")
+    f.write(f"Nonce hex value: {nonce.hex()}\n")
+    f.write(f"\nGenerated in {cha_duration:.4f} seconds\n")
+print(f"ChaCha20 info saved to {cha_info_filename}")
+
 # --- Generate BBS Output ---
 bbs_prng = BlumBlumShubPRNG(p, q, seed)
 start_time = time.perf_counter()
@@ -131,3 +157,15 @@ bbs_txt_path = os.path.join(dir, bbs_txt_filename)
 with open(bbs_txt_path, "w") as f:
     f.write(bbs_string)
 print(f"BBS bit string output saved to {bbs_txt_filename}")
+
+bbs_info_filename = f"bbs_{num_bits}_info.txt"
+bbs_info_path = os.path.join(dir, bbs_info_filename)
+
+with open(bbs_info_path, "w") as f:
+    f.write(f"PRNG integer value: {bbs_bits.uint}\n")
+    f.write(f"PRNG hex value: {bbs_bits.hex}\n")
+    f.write(f"p: {p}\n")
+    f.write(f"q: {q}\n")
+    f.write(f"seed: {seed}\n")
+    f.write(f"\nGenerated in {bbs_duration:.4f} seconds\n")
+print(f"BBS info saved to {bbs_info_filename}")
