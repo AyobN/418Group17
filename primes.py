@@ -1,18 +1,39 @@
-import gmpy2
-from gmpy2 import next_prime
+import secrets
+from sympy import nextprime
 
-def generate_blum_prime(min_value):
+def generate_blum_prime(bits):
     """
-    Generate a prime number greater than or equal to min_value that is congruent to 3 mod 4.
-    
+    Generate BBS prime
+
     Parameters:
-        min_value (int): The minimum value (lower bound) for the generated prime.
+        bits (int): The bit length of the desired prime
     
     Returns:
-        An integer prime p such that p >= min_value and p % 4 == 3.
+        int: A prime number of 'bits' bits such that prime % 4 == 3
     """
-    candidate = gmpy2.mpz(next_prime(min_value))
-    # Ensure that the candidate satisfies the condition p % 4 == 3.
-    while candidate % 4 != 3:
-        candidate = gmpy2.mpz(next_prime(candidate))
-    return int(candidate)
+    assert bits >= 2, "Bit size must be at least 2."
+    
+    while True:
+        # Generate a candidate with the desired bit length.
+        # Ensure the high bit is set so that the candidate has exactly 'bits' bits,
+        # and force it to be odd.
+        candidate = secrets.randbits(bits)
+        candidate |= (1 << (bits - 1)) | 1
+
+        candidate = nextprime(candidate)
+
+        # Ensure the candidate is still of the correct bit length.
+        if candidate.bit_length() > bits:
+            continue
+
+        if candidate % 4 == 3:
+            return candidate
+        else:
+            # If the candidate is prime but not congruent to 3 mod 4,
+            # iterate through successive primes until we find one that meets the condition.
+            while candidate.bit_length() == bits:
+                candidate = nextprime(candidate)
+                if candidate % 4 == 3:
+                    return candidate
+            # If we exceeded the bit length, start over.
+            continue

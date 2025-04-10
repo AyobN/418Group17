@@ -1,6 +1,7 @@
 import math
 import struct
 import secrets
+from bitstring import BitArray
 
 # "expand 32-byte k"
 constants = [0x61707865, 0x3320646e, 0x79622d32, 0x6b206574]
@@ -107,10 +108,11 @@ class ChaChaPRNG:
         self.counter += 1
         self.buffer_offset = 0
 
-    """
-    Return n pseudorandom bytes.
-    """
+    
     def generate_bytes(self, n):
+        """
+        Return n pseudorandom bytes.
+        """
         result = bytearray()
         while n > 0:
             if self.buffer_offset >= len(self.buffer):
@@ -122,18 +124,41 @@ class ChaChaPRNG:
             n -= take
         return bytes(result)
     
-    """
-    Return string of n random bits
-    n: number of bits to generate
-    """
-    def generate_bits(self, n):
+    def generate_string(self, n):
+        """
+        Return string of n random bits
+        n: number of bits to generate
+        """
         # Calculate the number of bytes required to produce at least n bits.
-        num_bytes = (n + 7) // 8  
+        num_bytes = (n + 7) // 8
         rand_bytes = self.generate_bytes(num_bytes)
         # Convert each byte to its 8-bit binary representation.
         bit_str = ''.join(f'{b:08b}' for b in rand_bytes)
         # Return only the first n bits.
         return bit_str[:n]
+    
+    
+    def generate_bits(self, n):
+        """
+        Return n random bits of BitArray
+        n: number of bits to generate
+        """
+        # Calculate the number of bytes required to produce at least n bits.
+        num_bytes = (n + 7) // 8
+        rand_bytes = self.generate_bytes(num_bytes)
+        # Convert each byte to its 8-bit binary representation.
+        bits = BitArray(bytes=rand_bytes)
+        # Return only the first n bits.
+        return bits[:n]
+    
+    def get_key():
+        return key
+    
+    def get_nonce():
+        return nonce
+    
+    def get_c():
+        return constants
 
 # Example usage:
 if __name__ == "__main__":
@@ -147,9 +172,16 @@ if __name__ == "__main__":
     # Generate 128 pseudorandom bytes.
     random_bytes_output = prng.generate_bytes(128)
     print("Random Bytes (hex):", random_bytes_output.hex())
+
     
-    # Generate 1000 pseudorandom bits.
-    random_bits_output = prng.generate_bits(1000)
-    print("Length of Random Bits Output:", len(random_bits_output))
-    # For display purposes, you might want to view only the first 100 bits.
-    print("First 100 bits:", random_bits_output[:100])
+    # Generate 1000 pseudorandom bits (String).
+    random_string = prng.generate_string(1000)
+    print("Length of Random Bits Output:", len(random_string))
+    # Show first 100 bits
+    print("First 100 bits:", random_string[:100])
+
+    # Generate 1000 pseudorandom bits
+    random_bits = prng.generate_bits(1000)
+    print("Length of Random Bits Output:", len(random_bits))
+    # Show first 100 bits
+    print("First 100 bits:", random_bits[:100].bin)
