@@ -93,17 +93,21 @@ end_time = time.perf_counter()
 cha_duration = end_time - start_time
 print(f"ChaCha20: Generated {num_bits} bits in {cha_duration:.4f} seconds.")
 
-#TODO create dirs for outputs to be saved
+dir = "output"
+os.makedirs(dir, exist_ok=True)
+
 #TODO save PRNG secrets to txt in dirs
 
 cha_bin_filename = f"chacha20_{num_bits}_output"
-with open(cha_bin_filename, "wb") as f:
+cha_bin_path = os.path.join(dir, cha_bin_filename)
+with open(cha_bin_path, "wb") as f:
     f.write(cha_bits.tobytes())
 print(f"ChaCha20 binary output saved to {cha_bin_filename}")
 
 cha_txt_filename = f"chacha20_output_{num_bits}.txt"
+cha_txt_path = os.path.join(dir, cha_txt_filename)
 cha_string = cha_bits.bin
-with open(cha_txt_filename, "w") as f:
+with open(cha_txt_path, "w") as f:
     f.write(cha_string)
 print(f"ChaCha20 bit string output saved to {cha_txt_filename}")
 
@@ -116,12 +120,14 @@ bbs_duration = end_time - start_time
 print(f"BBS: Generated {num_bits} bits in {bbs_duration:.4f} seconds.")
 
 bbs_bin_filename = f"bbs_output_{num_bits}"
-with open(bbs_bin_filename, "wb") as f:
+bbs_bin_path = os.path.join(dir, bbs_bin_filename)
+with open(bbs_bin_path, "wb") as f:
     f.write(bbs_bits.tobytes())
 print(f"BBS binary output saved to {bbs_bin_filename}")
 
 bbs_string = bbs_bits.bin
 bbs_txt_filename = f"bbs_output_{num_bits}.txt"
-with open(bbs_txt_filename, "w") as f:
+bbs_txt_path = os.path.join(dir, bbs_txt_filename)
+with open(bbs_txt_path, "w") as f:
     f.write(bbs_string)
 print(f"BBS bit string output saved to {bbs_txt_filename}")
