@@ -151,13 +151,13 @@ class ChaChaPRNG:
         # Return only the first n bits.
         return bits[:n]
     
-    def get_key():
+    def get_key(self):
         return key
     
-    def get_nonce():
+    def get_nonce(self):
         return nonce
     
-    def get_c():
+    def get_c(self):
         return constants
 
 # Example usage:
