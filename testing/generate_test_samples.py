@@ -1,10 +1,11 @@
-# testing/generate_test_samples.py
+# File: testing/generate_test_samples.py
+
 import os
 import time
 import secrets
 import argparse
 import sys
-sys.path.append("..")  
+sys.path.append("..")  # so it can find chacha20.py, etc.
 
 from bitstring import BitArray
 from chacha20 import ChaChaPRNG
@@ -37,14 +38,14 @@ def generate_chacha(bits, label):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--type", required=True, choices=["bbs", "chacha"])
-    parser.add_argument("--bits", type=int, default=1000000)
     parser.add_argument("--label", type=str, default="test")
-    parser.add_argument("--prime_size", type=int, default=512)
+    parser.add_argument("--bits", type=int, default=1000000, help="Number of bits to generate (default: 1 million)")
+    parser.add_argument("--prime_size", type=int, default=512, help="Bit size of primes for BBS")
     args = parser.parse_args()
 
     os.makedirs("diehard_inputs", exist_ok=True)
 
     if args.type == "bbs":
-        generate_bbs(args.bits, args.prime_size, args.label)
+        generate_bbs(bits=args.bits, prime_size=args.prime_size, label=args.label)
     elif args.type == "chacha":
-        generate_chacha(args.bits, args.label)
+        generate_chacha(bits=args.bits, label=args.label)

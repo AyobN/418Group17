@@ -3,7 +3,7 @@
 import os
 import secrets
 import sys
-sys.path.append("..")  # So Python can import chacha20, bbs, primes
+sys.path.append("..") 
 
 from bitstring import BitArray
 from chacha20 import ChaChaPRNG
