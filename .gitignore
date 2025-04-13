@@ -3,3 +3,5 @@
 /.DS_Store
 /chacha_output
 /bbs_output
+/testing/dieharder_inputs
+/testing/dieharder_results
