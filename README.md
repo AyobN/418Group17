@@ -20,6 +20,11 @@ generator.py prompts the user for the desired number of bits, generates random b
 
 ## Usage
 
+
+---
+
+
+
 ### Generate output for both PRNGs (ChaCha20 and BBS)
 
     python generator.py
@@ -92,6 +97,57 @@ Outputs saved in `bbs_output/`:
     bits = bbs.generate_bits(256)
     bytes_ = bbs.generate_bytes(32)
     string = bbs.generate_string(128)
+
+## Testing
+
+We have provided the scripts we used for our testing. You can use our code as described in the Usage section to generate your own 
+
+### Generate specific PRNG samples to custom sizes and labels
+
+    python testing/generate_test_samples.py --type [chacha|bbs] --label <name> --bits <count> --prime_size <size_for_bbs>
+
+Creates a single sample for testing. Output is saved in `diehard_inputs/`.
+
+---
+
+### Generate full test set (ChaCha, BBS-weak, BBS-strong) at once
+
+    python testing/generate_all_test_samples.py --bits <count>
+
+Generates all 3 PRNGs with specified bit length (default: 1 million).
+
+---
+
+### Run Dieharder tests on generated `.bin` files
+
+    bash testing/run_dieharder.sh
+
+Runs 5 core randomness tests on all files in `diehard_inputs/`. Results go to `diehard_results/`.
+
+---
+
+### Check reproducibility of PRNGs
+
+    python testing/reproducibility_test.py
+
+Verifies that both BBS and ChaCha20 produce identical output when using same inputs.
+
+---
+
+### Benchmark PRNG speed at multiple sizes
+
+    python testing/test_performance.py
+
+Tests generation time at 1M, 10M, and 100M bits for ChaCha, BBS-weak (128-bit), and BBS-strong (1024-bit). Saves results to `testing/performance_results.txt`.
+
+---
+
+### Generate and benchmark BBS variants across prime sizes
+
+    python testing/generate_bbs_samples.py
+
+Generates 100M-bit samples for BBS with primes from 32 to 1024 bits. Saves binaries and timing logs to `bbs_analysis_data/`.
+
 
 
 ## Dependencies
