@@ -57,7 +57,7 @@ if __name__ == "__main__":
             results.append((prng["label"], bits, duration))
 
     # Save results to txt file
-    txt_path = "testing/performance_results.txt"
+    txt_path = "./performance_results.txt"
     with open(txt_path, "w") as f:
         for row in results:
             label = f"{row[0]} ({row[1] // 1_000_000}M bits)"
