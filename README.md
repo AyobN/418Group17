@@ -168,7 +168,7 @@ You can install both libraries using pip by running:
 
 ```bash
 pip install sympy bitstring
-
+```
 
 
 # 🔐 ChaCha20 Encryption Tool
