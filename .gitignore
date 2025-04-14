@@ -5,3 +5,4 @@
 /bbs_output
 /testing/dieharder_inputs
 /testing/dieharder_results
+*.o
