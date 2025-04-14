@@ -173,8 +173,8 @@ pip install sympy bitstring
 
 # 🔐 ChaCha20 Encryption Tool
 
-This is a command-line program that performs **ChaCha20 encryption and decryption** using a 256-bit key and a 96-bit nonce.  
-ChaCha20 is a symmetric stream cipher — the same function is used for both encryption and decryption.
+This is a command-line program that performs **ChaCha20 encryption and decryption** using a 256-bit key and a 96-bit nonce, from files provided as command line arguments.  
+ChaCha20 is a symmetric stream cipher — the same function is used for both encryption and decryption. An output file, output.txt is generated from the resultant XOR. To decrypt, one must rename the file 'output.txt' to another filename, inputting a file with the name 'output.txt' will present problems as the output file is of the same name. 
 
 ---
 
@@ -190,8 +190,32 @@ You must provide:
 
 ## 🚀 How to Use
 
-### 🔁 Encrypt or Decrypt a File
+### 🔁 Encrypt a File
 
 ```bash
-./program key.txt nonce.txt input.txt
+$ ./program <key.txt> <nonce.txt> <input.txt>
+```
+
+For a 32-byte key file called `key.txt` and a 12-byte nonce file called `nonce.txt` and an an input file called lorem.txt (could be plain/ciphertext)
+```bash
+$ ./program key.txt nonce.txt lorem.txt
+Operation complete. Output saved to 'output.txt'.
+```
+### 🔁 Decrypt a file
+if your your ciphertext is named `output.txt` rename it to something else 
+```bash
+$ mv output.txt ciphertext
+$ ./program key.txt nonce.txt ciphertext 
+Operation complete. Output saved to 'output.txt'.
+```
+`output.txt` should be the same as `lorem.txt` or whatever your 'plaintext' was, as this program works with both binary and plaintext files (images, audio, text files, pdf's). 
+
+
+
+
+
+Run the program with your ciphertext as input
+```bsah
+$ ./program key.txt nonce.txt ciphertext
+```
 
